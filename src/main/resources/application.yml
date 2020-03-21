@@ -1,0 +1,20 @@
+# 数据源
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/jdbc?characterEncoding=utf-8&serverTimezone=GMT%2B8 # GMT%2B8表示北京时间 也可以UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# 日志级别
+logging:
+  level:
+    root: info
+    com.ivan: debug
+
+# mybatis-plus全局配置
+mybatis-plus:
+  global-config:
+    id-type: 0 # 主键策略使用数据库主键自增
+    db-column-underline: true # 2.3版本以后默认为true——驼峰命名法:数据库last_name 对应 Java对象lastName
+    table-prefix: tbl_ # 自动添加全局表前缀:数据库tbl_user 对应 实体类User
