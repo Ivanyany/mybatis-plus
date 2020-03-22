@@ -1,17 +1,15 @@
 package com.ivan;
 
+import com.baomidou.mybatisplus.mapper.Condition;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.ivan.bean.User;
+import com.ivan.bean.ar.User;
 import com.ivan.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @SpringBootTest
 public class MybatisPlusApplicationTests {
@@ -25,7 +23,7 @@ public class MybatisPlusApplicationTests {
 	@Test
 	public void testInsert(){
 
-		User user = new User("张三",20,"zhangsan@ivan.com");
+		com.ivan.bean.User user = new com.ivan.bean.User("张三",20,"zhangsan@ivan.com");
 
 		//1.对象为空的属性,其对应的字段不会出现在SQL语句中
 		Integer result = userMapper.insert(user);
@@ -47,7 +45,7 @@ public class MybatisPlusApplicationTests {
 	@Test
 	public void testUpdate(){
 
-		User user = new User();
+		com.ivan.bean.User user = new com.ivan.bean.User();
 		user.setId(5);
 		user.setName("张三update");
 
@@ -97,7 +95,7 @@ public class MybatisPlusApplicationTests {
 //		System.out.println(userPage);
 
 		//6.查询所有
-		List<User> userList2 = userMapper.selectList(null);
+		List<com.ivan.bean.User> userList2 = userMapper.selectList(null);
 		System.out.println(userList2);
 	}
 
@@ -119,6 +117,38 @@ public class MybatisPlusApplicationTests {
 		ids.add(5);
 		Integer result2 = userMapper.deleteBatchIds(ids);
 		System.out.println(result2);
+	}
+
+
+	//*************************条件构造器*******************************
+
+	/**
+	 * 条件构造器
+	 * 必须使用数据库中表的字段
+	 */
+	@Test
+	public void tsetEntityWrapper(){
+
+//		List<User> userList = userMapper.selectPage(new Page<>(1, 2),
+//				new EntityWrapper<User>()
+//						.between("age",18,24)
+//						.like("email","ivan"));
+
+		List<com.ivan.bean.User> userList = userMapper.selectPage(new Page<>(1, 2),
+				Condition.create()
+						.between("age",18,24)
+						.like("email","ivan"));
+
+		System.out.println(userList);
+
+	}
+
+	//*******************AR(Active Record)可以自己调用方法进行CRUD操作**********************
+	@Test
+	public void testARInsert(){
+		User user = new User("李四",22,"lisi@ivan.com");
+		boolean result = user.insert();
+		System.out.println(result);
 	}
 
 }
